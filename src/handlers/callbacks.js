@@ -10,6 +10,7 @@ const {
   sendDemoVideo,
   userFacingVideoError,
 } = require("../services/videoDelivery");
+const { videoQueue } = require("../services/videoQueue");
 const { tryAnotherKeyboard, isAllowedChat } = require("./start");
 const { evaluateVideoApproval } = require("../services/spendingPolicy");
 const { notify, MESSAGES } = require("../services/progressNotifier");
@@ -271,10 +272,23 @@ async function handleMockApprove(ctx, chatId, token, demos) {
     const caption =
       demo.videoCaption || `Your video is ready! 🎬\n${demo.title}`;
 
-    await sendDemoVideo(ctx.api, chatId, {
-      videoUrl: demo.videoUrl,
-      caption,
-    });
+    const { ahead, result } = videoQueue.enqueue(() =>
+      sendDemoVideo(ctx.api, chatId, {
+        videoUrl: demo.videoUrl,
+        caption,
+      })
+    );
+
+    if (ahead === 0) {
+      await ctx.reply("Sending your video now... 🎬");
+    } else {
+      const noun = ahead === 1 ? "person" : "people";
+      await ctx.reply(
+        `You're in line. ${ahead} ${noun} ahead of you. Your video will be sent as soon as theirs finishes.`
+      );
+    }
+
+    await result;
 
     clearApproval(chatId);
     await ctx.reply("Want to try another idea?", {
