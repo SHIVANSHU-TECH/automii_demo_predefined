@@ -1,0 +1,59 @@
+{
+  "_comment": "Demo data for Automii Bot. Update script / videoUrl as needed.",
+  "demos": [
+    {
+      "id": "apple-homeview",
+      "title": "Apple HomeView Launch Reel",
+      "keywords": [
+        "apple",
+        "homeview",
+        "smart",
+        "home",
+        "siri",
+        "gadget",
+        "device",
+        "launch"
+      ],
+      "aliases": [
+        "apple homeview",
+        "homeview",
+        "apple smart home",
+        "smart home device",
+        "apple launch",
+        "apple home",
+        "home view"
+      ],
+      "script": "Apple ne ab tumhare ghar mein bhi entry maar di hai! Aur woh bhi poore 40,000 rupaye mein!\n\n13 October ko Apple ne officially launch kar diya hai apna naya smart home device — Apple HomeView!\n\nAb socho, tum ghar mein enter karte ho aur ye device tumhara chehra pehchaan kar tumhari personal information screen par dikha deta hai!\n\nIsmein hai 7-inch Liquid Retina display, AI-powered Siri, FaceTime video calling aur smart home automation.\n\nMatlab ghar ki lights control karni ho, security camera check karna ho ya music play karna ho, sab kuch ek jagah!\n\nAur ismein ek 12-megapixel camera bhi hai, jo video call ke dauraan tumhe frame mein rakhta hai!\n\nLekin ab aati hai sabse interesting baat…\n\nIski price hai ₹39,900!\n\nPre-orders shuru ho chuke hain aur 13 November se ye available hoga.\n\nAb tum batao, kya ye future ke smart homes ki shuruaat hai, ya Apple ne ek aur mehenga gadget bana diya?\n\n40,000 rupaye mein tum ye kharidoge ya nahi?",
+      "videoUrl": "https://res.cloudinary.com/dpfmxzkr/video/upload/v1791997855/apple-homeview/final/apple-homeview-final.mp4",
+      "videoCaption": "Your video is ready! 🎬\nApple HomeView Launch Reel"
+    },
+    {
+      "id": "horror-haunted-house",
+      "title": "Haunted House Horror Short",
+      "keywords": ["horror", "haunted", "ghost", "scary"],
+      "aliases": [
+        "haunted house",
+        "horror video",
+        "scary house",
+        "ghost house"
+      ],
+      "script": "HOOK (0–3s):\nSomething is wrong with this house.\n\nBEAT 1 (3–12s):\nA creaking door. A shadow that moves when nobody else does.\nYou hear footsteps upstairs — but you live alone.\n\nBEAT 2 (12–22s):\nThe hallway lights flicker. A child's laugh echoes from an empty room.\nYour breath fogs in the cold… in July.\n\nCTA (22–30s):\nWould you stay the night? Comment YES or RUN.\nFollow Automii for more AI horror shorts.",
+      "videoUrl": "https://res.cloudinary.com/dpfmxzkr/video/upload/v1791997855/apple-homeview/final/apple-homeview-final.mp4",
+      "videoCaption": "Your video is ready! 🎬\nHaunted House Horror Short"
+    },
+    {
+      "id": "ai-productivity",
+      "title": "AI Productivity Reel",
+      "keywords": ["productivity", "automation", "workflow", "claude"],
+      "aliases": [
+        "ai productivity",
+        "productivity reel",
+        "automation workflow",
+        "claude automation"
+      ],
+      "script": "HOOK (0–3s):\nStop doing the same 10 tasks every morning.\n\nBEAT 1 (3–12s):\nOne idea in Telegram → script ready in seconds.\nApprove once. Automii handles the rest.\n\nBEAT 2 (12–22s):\nVoice, visuals, captions — stacked into one short.\nNo tab-hopping. No copy-paste chaos.\n\nCTA (22–30s):\nSend your next idea. Watch Automii turn it into a reel.",
+      "videoUrl": "https://res.cloudinary.com/dpfmxzkr/video/upload/v1791997855/apple-homeview/final/apple-homeview-final.mp4",
+      "videoCaption": "Your video is ready! 🎬\nAI Productivity Reel"
+    }
+  ]
+}

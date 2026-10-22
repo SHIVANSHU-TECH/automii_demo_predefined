@@ -1,0 +1,14 @@
+{
+  "_comment": "Sample mock-mode demos only. Replace videoUrl with your own public MP4 before a mock showcase. Live mode does not use these files.",
+  "demos": [
+    {
+      "id": "sample-product-launch",
+      "title": "Sample Product Launch",
+      "keywords": ["product", "launch", "sample", "demo"],
+      "aliases": ["product launch", "sample demo", "launch video"],
+      "script": "HOOK:\nThis is a sample script shipped with the starter zip.\n\nBODY:\nReplace this text in data/demos.json if you use mock mode.\nLive mode writes a new script from the viewer's topic.\n\nCTA:\nSend another idea to try the demo again.",
+      "videoUrl": "https://res.cloudinary.com/demo/video/upload/dog.mp4",
+      "videoCaption": "Your video is ready!\nSample Product Launch"
+    }
+  ]
+}
