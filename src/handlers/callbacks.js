@@ -253,12 +253,24 @@ async function handleMockApprove(ctx, chatId, token, demos) {
 
   await ctx.answerCallbackQuery({ text: "Generating…" });
   await safeEditButtons(ctx, "Generating video…");
-  await ctx.reply("Preparing your video... 🎬");
 
-  const caption =
-    demo.videoCaption || `Your video is ready! 🎬\n${demo.title}`;
+  const progress = [
+    "Preparing your video... 🎬",
+    "Generating your scenes... 🎬",
+    "Putting the voice and visuals together...",
+    "Final render is almost ready...",
+  ];
+  const stepMs = 30 * 1000;
 
   try {
+    for (let i = 0; i < progress.length; i += 1) {
+      await ctx.reply(progress[i]);
+      await delay(stepMs);
+    }
+
+    const caption =
+      demo.videoCaption || `Your video is ready! 🎬\n${demo.title}`;
+
     await sendDemoVideo(ctx.api, chatId, {
       videoUrl: demo.videoUrl,
       caption,
@@ -273,6 +285,10 @@ async function handleMockApprove(ctx, chatId, token, demos) {
     clearApproval(chatId);
     await ctx.reply(userFacingVideoError(err));
   }
+}
+
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function safeEditButtons(ctx, label) {
