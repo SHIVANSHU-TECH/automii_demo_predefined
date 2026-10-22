@@ -4,7 +4,8 @@ const {
   updateSession,
   STATES,
 } = require("../services/sessionStore");
-const { matchDemo, listSupportedTopics } = require("../services/demoMatcher");
+const { listSupportedTopics } = require("../services/demoMatcher");
+const { resolveDemo } = require("../services/contentSource");
 const { isAllowedChat } = require("./start");
 const { canAcceptNewIdea } = require("../services/spendingPolicy");
 const { notify, MESSAGES } = require("../services/progressNotifier");
@@ -93,7 +94,7 @@ async function handleMockIdea(ctx, { demos }) {
     return;
   }
 
-  const demo = matchDemo(text, demos);
+  const demo = await resolveDemo(text, demos);
 
   if (!demo) {
     logger.info("No demo match", { chatId: String(chatId), text });
@@ -119,6 +120,13 @@ async function handleMockIdea(ctx, { demos }) {
     demoId: demo.id,
     approvalToken,
     videoSent: false,
+    demoSnapshot: {
+      id: demo.id,
+      title: demo.title,
+      script: demo.script,
+      videoUrl: demo.videoUrl,
+      videoCaption: demo.videoCaption,
+    },
   });
 
   logger.info("Demo selected", {

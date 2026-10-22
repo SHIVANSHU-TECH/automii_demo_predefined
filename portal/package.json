@@ -1,0 +1,8 @@
+{
+  "name": "automii-content-portal",
+  "private": true,
+  "description": "Vercel page where a client sets the Telegram demo script and video link.",
+  "dependencies": {
+    "@vercel/blob": "^2.0.0"
+  }
+}

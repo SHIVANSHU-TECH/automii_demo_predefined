@@ -237,7 +237,7 @@ async function handleMockApprove(ctx, chatId, token, demos) {
     return;
   }
 
-  const demo = findDemoById(session.demoId, demos);
+  const demo = session.demoSnapshot || findDemoById(session.demoId, demos);
   if (!demo) {
     await ctx.answerCallbackQuery({ text: "Demo not found." });
     clearApproval(chatId);

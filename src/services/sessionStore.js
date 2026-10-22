@@ -23,6 +23,7 @@ function createDefaultSession() {
     approvalToken: null,
     videoSent: false,
     promptMessageId: null,
+    demoSnapshot: null,
   };
 }
 
@@ -53,6 +54,7 @@ function clearApproval(chatId) {
     approvalToken: null,
     videoSent: false,
     promptMessageId: null,
+    demoSnapshot: null,
   });
 }
 

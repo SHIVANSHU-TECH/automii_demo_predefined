@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Automii demo content</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: #f4f1ea;
+      color: #1c1915;
+    }
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+    h1 { font-size: 2rem; margin-bottom: 8px; }
+    p { line-height: 1.5; }
+    label { display: block; font-weight: 700; margin: 18px 0 6px; }
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #c9c1b2;
+      border-radius: 8px;
+      padding: 12px;
+      font: 16px/1.4 system-ui, sans-serif;
+      background: #fff;
+    }
+    textarea { min-height: 220px; resize: vertical; }
+    button {
+      margin-top: 18px;
+      margin-right: 8px;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: 700 15px system-ui, sans-serif;
+      cursor: pointer;
+    }
+    #save { background: #1c1915; color: #fff; }
+    #clear { background: #fff; color: #1c1915; border: 1px solid #1c1915; }
+    #status { min-height: 1.4em; font-family: system-ui, sans-serif; }
+    .note { background: #fff; border-radius: 12px; padding: 14px 16px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Automii demo content</h1>
+    <p class="note">Paste the script and the video link you want the Telegram bot to show. If both boxes are empty, the bot keeps using the built-in Apple HomeView script and video.</p>
+    <form id="form">
+      <label for="password">Portal password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required />
+      <label for="title">Title (optional)</label>
+      <input id="title" name="title" type="text" maxlength="120" placeholder="My demo reel" />
+      <label for="script">Script</label>
+      <textarea id="script" name="script" placeholder="Paste the full script the bot should send."></textarea>
+      <label for="videoUrl">Video link</label>
+      <input id="videoUrl" name="videoUrl" type="url" placeholder="https://res.cloudinary.com/.../video.mp4" />
+      <button id="save" type="submit">Save for the bot</button>
+      <button id="clear" type="button">Clear and use the built-in demo</button>
+      <p id="status"></p>
+    </form>
+  </main>
+  <script>
+    const status = document.querySelector("#status");
+    const fields = ["title", "script", "videoUrl"];
+
+    function fill(data) {
+      for (const name of fields) {
+        document.querySelector("#" + name).value = data[name] || "";
+      }
+      status.textContent = data.source === "portal"
+        ? "The bot is using this script and video."
+        : "The bot is using the built-in Apple HomeView demo.";
+    }
+
+    async function load() {
+      const response = await fetch("/api/content");
+      fill(await response.json());
+    }
+
+    async function send(body) {
+      status.textContent = "Saving...";
+      const response = await fetch("/api/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        status.textContent = data.error || "Could not save.";
+        return;
+      }
+      fill(data);
+      status.textContent = data.source === "portal"
+        ? "Saved. The bot will use this on the next message."
+        : "Cleared. The bot is back on the built-in demo.";
+    }
+
+    document.querySelector("#form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      send({
+        password: document.querySelector("#password").value,
+        title: document.querySelector("#title").value,
+        script: document.querySelector("#script").value,
+        videoUrl: document.querySelector("#videoUrl").value,
+      });
+    });
+
+    document.querySelector("#clear").addEventListener("click", () => {
+      send({
+        password: document.querySelector("#password").value,
+        title: "",
+        script: "",
+        videoUrl: "",
+      });
+    });
+
+    load().catch(() => {
+      status.textContent = "Could not load the current content.";
+    });
+  </script>
+</body>
+</html>
