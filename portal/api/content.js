@@ -1,4 +1,4 @@
-const { head, put } = require("@vercel/blob");
+const { get, put } = require("@vercel/blob");
 
 const BLOB_PATH = "automii-content.json";
 
@@ -41,10 +41,9 @@ function readBody(req) {
 async function readSaved() {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return emptyContent();
   try {
-    const blob = await head(BLOB_PATH);
-    const response = await fetch(blob.url);
-    if (!response.ok) return emptyContent();
-    const data = await response.json();
+    const result = await get(BLOB_PATH, { access: "private", useCache: false });
+    if (!result || result.statusCode !== 200 || !result.stream) return emptyContent();
+    const data = await new Response(result.stream).json();
     const script = clean(data.script);
     const videoUrl = clean(data.videoUrl);
     return {
@@ -120,7 +119,7 @@ module.exports = async function handler(req, res) {
 
     const saved = { title, script, videoUrl };
     await put(BLOB_PATH, JSON.stringify(saved), {
-      access: "public",
+      access: "private",
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: "application/json",
