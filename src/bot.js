@@ -1,6 +1,7 @@
 // Prefer project .env over leftover shell vars (e.g. BOT_MODE=mock from a prior session).
 require("dotenv").config({ override: true });
 
+const http = require("http");
 const { Bot } = require("grammy");
 const { checkConfig } = require("./checkConfig");
 const { loadConfig, ensureRuntimeDirs } = require("./config");
@@ -94,7 +95,20 @@ async function main() {
   logger.info("Automii Bot starting (long polling)…", {
     mode: appConfig.botMode,
   });
-  logger.info("Open https://t.me/Automii_bot to test once the token is configured.");
+  logger.info("Open your bot in Telegram to test once the token is configured.");
+
+  // Render web services require a process listening on PORT.
+  const port = Number(process.env.PORT);
+  if (port) {
+    http
+      .createServer((_req, res) => {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("ok");
+      })
+      .listen(port, () => {
+        logger.info(`Health check listening on port ${port}`);
+      });
+  }
 
   try {
     await bot.start({

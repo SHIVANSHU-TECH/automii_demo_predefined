@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: automii-demo-predefined
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: BOT_MODE
+        value: mock
+      - key: CLAUDE_DRY_RUN
+        value: "1"
+      - key: BOT_TOKEN
+        sync: false
