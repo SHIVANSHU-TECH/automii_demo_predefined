@@ -111,30 +111,53 @@ async function main() {
   }
 
   try {
-    await bot.start({
-      onStart: (info) => {
-        logger.info(`Bot @${info.username} is online (id=${info.id}).`);
-      },
-    });
+    await startPolling(bot);
   } catch (err) {
     logger.error("Failed to start polling:", err.description || err.message);
-    if (
-      String(err.message || "").includes("409") ||
-      err.error_code === 409 ||
-      String(err.description || "").includes("Conflict")
-    ) {
+    if (isPollingConflict(err)) {
       logger.error(
-        "Polling conflict: another instance may already be calling getUpdates for this bot."
+        "Polling conflict: stop every other copy of this bot, including one running on your computer, then redeploy."
       );
     }
     if (err.error_code === 401) {
       logger.error(
-        "Invalid BOT_TOKEN. Regenerate the token in @BotFather and update .env."
+        "Invalid BOT_TOKEN. Regenerate the token in @BotFather and update the Render environment variable."
       );
     }
     if (queue) await queue.stop();
     if (store) store.close();
     process.exit(1);
+  }
+}
+
+function isPollingConflict(err) {
+  return (
+    err.error_code === 409 ||
+    String(err.message || "").includes("409") ||
+    String(err.description || "").includes("Conflict") ||
+    String(err.message || "").includes("terminated by other getUpdates")
+  );
+}
+
+async function startPolling(bot) {
+  const attempts = 6;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      await bot.start({
+        onStart: (info) => {
+          logger.info(`Bot @${info.username} is online (id=${info.id}).`);
+        },
+      });
+      return;
+    } catch (err) {
+      if (!isPollingConflict(err) || attempt === attempts) {
+        throw err;
+      }
+      logger.warn(
+        `Another copy is still polling. Retry ${attempt}/${attempts} in 8 seconds.`
+      );
+      await new Promise((resolve) => setTimeout(resolve, 8000));
+    }
   }
 }
 
